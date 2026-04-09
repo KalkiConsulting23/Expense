@@ -9,4 +9,8 @@ input{
   margin: 0;
 }
 
-
+input{
+  width: 70px;
+  height: 40px;
+  
+}

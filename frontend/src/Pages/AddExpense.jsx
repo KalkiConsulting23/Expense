@@ -27,8 +27,9 @@ const AddExpense = () => {
            
             <input type="text" {...register("Expense_name")} placeholder='Expense Name' className='border-2'/>
             <input id='num'  type="Number" min={0}  minLength={1}{...register("amount")}placeholder='Amount' className='border-2 '/>
-           
-            <input type="date" {...register("startDate")}/>
+           <label htmlFor="startDate">Start Date</label>
+            <input  type="date" {...register("startDate")}/>
+           <label htmlFor="Enddate">End Date</label>
             <input type="date" {...register("endDate")}/>
             <select {...register("recurring")}  onClick={(e)=>{e.preventDefault; setrecurr(e.target.value)}}>
                 <option value="One_Time">One Time</option>

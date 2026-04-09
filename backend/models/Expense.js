@@ -12,7 +12,7 @@ const expenseSchema = new mongoose.Schema({
     },
   
   endDate: { type: Date },
-  startDate: { type: Date, default: Date.now },
+  startDate: { type: Date},
   expenseType: { type: String,
      type: String,
     enum: ["Salary", "Loan","Other", "Office", "Home"],

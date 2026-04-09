@@ -5,7 +5,7 @@ import ExpenseTable from '../component/ExpenseTable'
 
 const Home = () => {
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-full h-screen overflow-hidden'>
         <Nav/>
         <Expense />
         <ExpenseTable/>

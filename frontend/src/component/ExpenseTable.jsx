@@ -18,28 +18,144 @@ const getMonthsBetween = (start, end) => {
   return months;
 };
 const ExpenseTable = () => {
-    const [expenses, setexpenses] = useState([]);
+  
+  const tabMonth = [{ month: "Jan", monthNum: "01" }, { month: "Feb", monthNum: "02" }, { month: "Mar", monthNum: "03" }, { month: "Apr", monthNum: "04" }, { month: "May", monthNum: "05" }, { month: "Jun", monthNum: "06" }, { month: "Jul", monthNum: "07" }, { month: "Aug", monthNum: "08" }, { month: "Sep", monthNum: "09" }, { month: "Oct", monthNum: "10" }, { month: "Nov", monthNum: "11" }, { month: "Dec", monthNum: "12" }];
+  const [expenses, setexpenses] = useState([]);
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+ 
+  // console.log(currentDate);
+   const filterdata=expenses.filter((data) => 
     
-    useEffect(async() => {
-        
-        await axios.post(`http://localhost:5000/api/expense/allexpense`)
-        .then(response =>  setexpenses(response.data));
-        
-    }
-    
-    
-    , [])
-    // console.log(expenses)
-  return (
-    <div className='w-full h-6/10 '>
-        {expenses.map((data,id)=>(
-            <div>
+   data.startDate.split("-")[0] <= currentYear );
+  console.log(filterdata);
+  useEffect(async () => {
 
-            <h1 id={id}>{data.Expense_name}</h1>
-            <h1 id={id}>{data.amount}</h1>
-            <h1 id={id}>{data.endDate}</h1>
+    await axios.post(`http://localhost:5000/api/expense/allexpense`)
+      .then(response => setexpenses(response.data));
+    }
+
+
+    , [])
+   
+  // console.log(expenses)
+  return (
+    <div className='w-full h-6/10 overflow-hidden'>
+
+      <div className='flex w-full px-2'>
+        <div className='w-20'>
+          Expnase name
+        </div>
+        {tabMonth.map((tdata, id) => (
+          <div className='flex'>
+
+            <div className='border-2 border-black w-19 '>
+              {tdata.month}
             </div>
+            <div className='border-2 border-black w-18'>
+              Paid
+            </div>
+
+          </div>
         ))}
+      </div>
+       {filterdata.map((expdata, id) => (
+          
+      <div className='flex w-full px-2'>
+         <div className='w-20'>
+        
+          {expdata.Expense_name}
+        </div>
+        {expdata.startDate.split("-")[0] == currentYear && expdata.endDate.split("-")[0] == currentYear ? tabMonth.map((tdata, id) => (
+          <div className='flex'>
+            
+            <div id={id} className='border-2 border-black w-19'>
+              {expdata.startDate.split("-")[1]<=tdata.monthNum && expdata.endDate.split("-")[1]>=tdata.monthNum ? expdata.amount  : "-"}
+            </div>
+            <div className='border-2 border-black w-18'>
+             <input id={id} type="text"   onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      console.log(e.target.id);
+    }
+  }}/>
+          
+            </div>
+            
+          </div>
+        )):expdata.startDate.split("-")[0] < currentYear && expdata.endDate.split("-")[0] >=currentYear? tabMonth.map((tdata, id) => (
+           <div className='flex'>
+            
+            <div id={id} className='border-2 border-black w-19'>
+              {expdata.endDate.split("-")[1]>=tdata.monthNum  ? expdata.amount  : "-"}
+            </div>
+            <div className='border-2 border-black w-18'>
+             <input id={id} type="text"   onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      console.log(e.target.id);
+    }
+  }}/>
+            </div>
+            
+          </div>
+        )):expdata.endDate.split("-")[0] >= currentYear ? tabMonth.map((tdata, id) => (
+           <div className='flex'>
+            
+            <div id={id} className='border-2 border-black w-19'>
+              { expdata.amount}
+            </div>
+            <div className='border-2 border-black w-18'>
+            <input id={id} type="text"   onKeyDown={(e) => {
+    if (e.key === "Enter") {
+     
+      console.log(e.target.id);
+    }
+  }}/>
+            </div>
+            
+          </div>
+        )):""}
+                                                                                   {/* v2 */}
+       {/* {expdata.endDate.split("-")[0]>=currentYear ? expdata.startDate.split("-")[0] < currentYear ? tabMonth.map((tdata, id) => (
+          <div className='flex'>
+            
+            <div id={id} className='border-2 border-black w-19'>
+              {expdata.amount}
+            </div>
+            <div className='border-2 border-black w-18'>
+             <input type="text"/>
+            </div>
+            
+          </div>
+        )): expdata.startDate.split("-")[0]==currentYear ? tabMonth.map((tdata, id) => (
+          <div className='flex'>
+            
+            <div  className='border-2 border-black w-19'>
+              
+              {expdata.startDate.split("-")[1]<=tdata.monthNum ? expdata.amount  : expdata.endDate.split("-")[1]==tdata.monthNum ? 0 : 0}
+            </div>
+            <div className='border-2 border-black w-18'>
+             <input type="text"/>
+            </div>
+            
+          </div>
+        )): "yes": "no"} */}
+       
+        {/* {tabMonth.map((tdata, id) => (
+          <div className='flex'>
+            
+            <div className='border-2 border-black w-19'>
+              {expdata.amount}
+            </div>
+            <div className='border-2 border-black w-18'>
+             <input type="text"/>
+            </div>
+            
+          </div>
+        ))} */}
+        
+      </div>
+        ))}
+         
     </div>
   )
 }

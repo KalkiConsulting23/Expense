@@ -9,7 +9,7 @@ const Nav = () => {
   }
 
   return (
-    <div className='w-full h-1/10  flex items-center justify-between bg-amber-500 px-5'>
+    <div className='w-full h-1/10  flex items-center justify-between bg-amber-500 px-5 overflow-hidden'>
         <div className='h-full w-1/10 content-center'>
             Logo
         </div>
