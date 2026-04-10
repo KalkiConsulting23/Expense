@@ -4,11 +4,12 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 // import { set } from '../../../backend/app';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AddExpense = () => {
     const { register,handleSubmit,formState: { errors },} = useForm();
  const navigate=useNavigate();
+//  const route=Router();
     const [recurr, setrecurr] = useState("")
     const onSubmit = async (data) => {
         data.preventDefault;
@@ -16,6 +17,7 @@ const AddExpense = () => {
     await axios.post("http://localhost:5000/api/expense/create", data);
     alert("expense Added");
     navigate("/");
+    // route.push("/");
   };
   
 

@@ -30,6 +30,14 @@ exports.readExpense=async(req,res)=>{
     var data=await Expense.find();
     res.json(data);
 }
+exports.updateExpense=async(req,res)=>{
+    var data=await Expense.findById(req.params.id);
+    var {paid,month}=req.body;
+    var calculate=data.amount-paid;
+    data.payments.push({"paid":paid,"month":month,"remain":calculate});
+    await data.save();
+    res.json(data);
+}
 // exports.getOrders = async (req, res) => {
 //   try {
 //     const orders = await Order.find().populate({

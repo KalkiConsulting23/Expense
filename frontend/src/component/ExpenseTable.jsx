@@ -17,6 +17,18 @@ const getMonthsBetween = (start, end) => {
 
   return months;
 };
+const handlePaid=(expid,data,month)=>{
+  fetch(`http://localhost:5000/api/expense/update/${expid}`,{ method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          paid: data,
+          month: month
+        })}).then(res=>res.json()).then(data=>console.log(data));
+  // console.log(expid,data,month);
+  
+}
 const ExpenseTable = () => {
   
   const tabMonth = [{ month: "Jan", monthNum: "01" }, { month: "Feb", monthNum: "02" }, { month: "Mar", monthNum: "03" }, { month: "Apr", monthNum: "04" }, { month: "May", monthNum: "05" }, { month: "Jun", monthNum: "06" }, { month: "Jul", monthNum: "07" }, { month: "Aug", monthNum: "08" }, { month: "Sep", monthNum: "09" }, { month: "Oct", monthNum: "10" }, { month: "Nov", monthNum: "11" }, { month: "Dec", monthNum: "12" }];
@@ -28,11 +40,14 @@ const ExpenseTable = () => {
    const filterdata=expenses.filter((data) => 
     
    data.startDate.split("-")[0] <= currentYear );
-  console.log(filterdata);
-  useEffect(async () => {
+  // console.log(filterdata);
+  useEffect( () => {
 
-    await axios.post(`http://localhost:5000/api/expense/allexpense`)
+    async function fDATA(){
+await axios.post(`http://localhost:5000/api/expense/allexpense`)
       .then(response => setexpenses(response.data));
+    }
+    fDATA();
     }
 
 
@@ -62,11 +77,36 @@ const ExpenseTable = () => {
        {filterdata.map((expdata, id) => (
           
       <div className='flex w-full px-2'>
-         <div className='w-20'>
+         
+        {expdata.endDate.split("-")[0] > currentYear ? 
+        <div className='flex'>
+          <div className='w-20'>
         
           {expdata.Expense_name}
         </div>
-        {expdata.startDate.split("-")[0] == currentYear && expdata.endDate.split("-")[0] == currentYear ? tabMonth.map((tdata, id) => (
+        {tabMonth.map((tdata, id) => (
+           <div className='flex'>
+            
+            <div id={id} className='border-2 border-black w-19'>
+              {  expdata.startDate.split("-")[1]<=tdata.monthNum  ? expdata.amount  : "-"}
+            </div>
+            <div className='border-2 border-black w-18'>
+            <input id={id} type="text"   onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      
+      handlePaid(expdata._id,e.target.value,tdata.month+"-"+currentYear);
+    }
+  }}/>
+            </div>
+            
+          </div>
+        ))}</div>:expdata.startDate.split("-")[0] == currentYear && expdata.endDate.split("-")[0] == currentYear ?
+        <div className='flex'>
+          <div className='w-20'>
+        
+          {expdata.Expense_name}
+        </div>
+           {tabMonth.map((tdata, id) => (
           <div className='flex'>
             
             <div id={id} className='border-2 border-black w-19'>
@@ -75,14 +115,20 @@ const ExpenseTable = () => {
             <div className='border-2 border-black w-18'>
              <input id={id} type="text"   onKeyDown={(e) => {
     if (e.key === "Enter") {
-      console.log(e.target.id);
+     handlePaid(expdata._id,e.target.value,tdata.month+"-"+currentYear);
     }
   }}/>
           
             </div>
             
           </div>
-        )):expdata.startDate.split("-")[0] < currentYear && expdata.endDate.split("-")[0] >=currentYear? tabMonth.map((tdata, id) => (
+        ))}</div>:expdata.startDate.split("-")[0] < currentYear && expdata.endDate.split("-")[0] >=currentYear? 
+        <div className='flex'> 
+        <div className='w-20'>
+        
+          {expdata.Expense_name}
+        </div>
+        {tabMonth.map((tdata, id) => (
            <div className='flex'>
             
             <div id={id} className='border-2 border-black w-19'>
@@ -91,29 +137,13 @@ const ExpenseTable = () => {
             <div className='border-2 border-black w-18'>
              <input id={id} type="text"   onKeyDown={(e) => {
     if (e.key === "Enter") {
-      console.log(e.target.id);
+      handlePaid(expdata._id,e.target.value,tdata.month+"-"+currentYear);
     }
   }}/>
             </div>
             
           </div>
-        )):expdata.endDate.split("-")[0] >= currentYear ? tabMonth.map((tdata, id) => (
-           <div className='flex'>
-            
-            <div id={id} className='border-2 border-black w-19'>
-              { expdata.amount}
-            </div>
-            <div className='border-2 border-black w-18'>
-            <input id={id} type="text"   onKeyDown={(e) => {
-    if (e.key === "Enter") {
-     
-      console.log(e.target.id);
-    }
-  }}/>
-            </div>
-            
-          </div>
-        )):""}
+        ))}</div>:""}
                                                                                    {/* v2 */}
        {/* {expdata.endDate.split("-")[0]>=currentYear ? expdata.startDate.split("-")[0] < currentYear ? tabMonth.map((tdata, id) => (
           <div className='flex'>
