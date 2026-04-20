@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const expenseSchema = new mongoose.Schema({
   Expense_name: { type: String, required: true },
   amount: { type: Number, required: true },
-  payments: [],
+  payments: [{
+    paid: { type: Number, required: true },
+    month: { type: String, required: true },
+    remain: { type: Number, required: true },
+  }],
   recurring: {
     active: { type: Boolean, default: false },
       recurstartDate: { type: Date, default: null},

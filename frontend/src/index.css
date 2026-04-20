@@ -1,6 +1,7 @@
 @import "tailwindcss";
 input{
     width: 160px;
+    
     display: inline-block;
 }
 #num::-webkit-outer-spin-button,
@@ -9,8 +10,14 @@ input{
   margin: 0;
 }
 
-input{
+.paid {
   width: 70px;
   height: 40px;
   
+  
+}
+.amount{
+display: flex;
+justify-content: center;
+align-items: center;
 }

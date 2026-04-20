@@ -33,6 +33,7 @@ exports.readExpense=async(req,res)=>{
 exports.updateExpense=async(req,res)=>{
     var data=await Expense.findById(req.params.id);
     var {paid,month}=req.body;
+   
     var calculate=data.amount-paid;
     data.payments.push({"paid":paid,"month":month,"remain":calculate});
     await data.save();
