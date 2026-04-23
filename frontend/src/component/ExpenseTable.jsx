@@ -1,33 +1,36 @@
 "use client"
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-const getMonthsBetween = (start, end) => {
-  const months = [];
-  let current = new Date(start);
+import { useRef } from 'react';
 
-  while (current <= new Date(end)) {
-    months.push(
-      current.toLocaleString("default", {
-        month: "short",
-        year: "2-digit",
-      })
-    );
-    current.setMonth(current.getMonth() + 1);
-  }
+// const getMonthsBetween = (start, end) => {
+//   const months = [];
+//   let current = new Date(start);
 
-  return months;
-};
-const handlePaid=(expid,data,month)=>{
+//   while (current <= new Date(end)) {
+//     months.push(
+//       current.toLocaleString("default", {
+//         month: "short",
+//         year: "2-digit",
+//       })
+//     );
+//     current.setMonth(current.getMonth() + 1);
+//   }
+
+//   return months;
+// };
+const handlePaid=(expid,currAmount,data,month)=>{
   fetch(`http://localhost:5000/api/expense/update/${expid}`,{ method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          currAmount: currAmount,
           paid: data,
           month: month
         })}).then(res=>res.json()).then(data=>console.log(data));
   // console.log(expid,data,month);
-  
+  window.location.reload();
 }
 const ExpenseTable = () => {
   
@@ -35,7 +38,17 @@ const ExpenseTable = () => {
   const [expenses, setexpenses] = useState([]);
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
+  // const jandata=document.querySelectorAll("#Jan");
+  const [MonthToT, setMonthToT] = useState({});
+  const totalMonth=(month,value)=>{
+    setMonthToT(
+      (prev) => ({
+    ...prev,
+    [month]: prev[month] ? prev[month] + Number(value) : Number(value)
+  }));
+  }
  
+  console.log(MonthToT);
   // console.log(currentDate);
    const filterdata=expenses.filter((data) => 
     
@@ -87,14 +100,15 @@ await axios.post(`http://localhost:5000/api/expense/allexpense`)
         {tabMonth.map((tdata, id) => (
            <div className='flex'>
             
-            <div id={id} className='amount border-2 border-black w-19'>
+            <div id={tdata.month}  className='amount border-2 border-black w-19'>
               {  expdata.startDate.split("-")[1]<=tdata.monthNum  ? expdata.amount  : "-"}
             </div>
             <div className='border-2 border-black w-18'>
             <input id={id} className='paid' type="text" value={expdata.payments.find((d)=>d.month==tdata.monthNum+`-${currentYear}`)?.paid}  onKeyDown={(e) => {
     if (e.key === "Enter") {
-      
-      handlePaid(expdata._id,e.target.value,tdata.monthNum<=9? `${tdata.monthNum}-${currentYear}`:`${tdata.monthNum}-${currentYear}`);
+       const currAmount=document.querySelector(`#${tdata.month}`).innerText;
+   
+      handlePaid(expdata._id,currAmount,e.target.value,tdata.monthNum<=9? `${tdata.monthNum}-${currentYear}`:`${tdata.monthNum}-${currentYear}`);
     }
   }}/>
             </div>
@@ -109,13 +123,15 @@ await axios.post(`http://localhost:5000/api/expense/allexpense`)
            {tabMonth.map((tdata, id) => (
           <div className='flex'>
             
-            <div id={id} className='amount border-2 border-black w-19'>
+            <div id={tdata.month}  className='amount border-2 border-black w-19'>
               {expdata.startDate.split("-")[1]<=tdata.monthNum && expdata.endDate.split("-")[1]>=tdata.monthNum ?  expdata.payments.find((d)=>d.month==`0${Number(tdata.monthNum)-1}`+`-${currentYear}`)?.remain ? expdata.payments.find((d)=>d.month==`0${Number(tdata.monthNum)-1}`+`-${currentYear}`)?.remain + expdata.amount : expdata.amount  : "-"}
             </div>
             <div className='border-2 border-black w-18'>
              <input id={id} type="text" className='paid' value={expdata.payments.find((d)=>d.month==tdata.monthNum+`-${currentYear}`)?.paid}  onKeyDown={(e) => {
     if (e.key === "Enter") {
-     handlePaid(expdata._id,e.target.value,tdata.monthNum<=9? `${tdata.monthNum}-${currentYear}`:`${tdata.monthNum}-${currentYear}`);
+         const currAmount=document.querySelector(`#${tdata.month}`).innerText;
+      
+     handlePaid(expdata._id,currAmount,e.target.value,tdata.monthNum<=9? `${tdata.monthNum}-${currentYear}`:`${tdata.monthNum}-${currentYear}`);
     }
   }}/>
            
@@ -131,13 +147,15 @@ await axios.post(`http://localhost:5000/api/expense/allexpense`)
         {tabMonth.map((tdata, id) => (
            <div className='flex'>
             
-            <div id={id} className='amount border-2 border-black w-19'>
+            <div id={tdata.month}  className='amount border-2 border-black w-19'>
               {expdata.endDate.split("-")[1]>=tdata.monthNum  ? expdata.amount  : "-"}
             </div>
             <div className='border-2 border-black w-18'>
              <input id={id} className='paid' type="text" value={expdata.payments.find((d)=>d.month==tdata.monthNum+`-${currentYear}`)?.paid}  onKeyDown={(e) => {
     if (e.key === "Enter") {
-      handlePaid(expdata._id,e.target.value,tdata.monthNum<=9? `${tdata.monthNum}-${currentYear}`:`${tdata.monthNum}-${currentYear}`);
+      const currAmount=document.querySelector(`#${tdata.month}`).innerText;
+     
+      handlePaid(expdata._id,currAmount,e.target.value,tdata.monthNum<=9? `${tdata.monthNum}-${currentYear}`:`${tdata.monthNum}-${currentYear}`);
     }
   }}/>
             </div>
@@ -182,6 +200,7 @@ await axios.post(`http://localhost:5000/api/expense/allexpense`)
             
           </div>
         ))} */}
+        
         
       </div>
         ))}

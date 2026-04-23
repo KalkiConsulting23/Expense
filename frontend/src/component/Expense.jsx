@@ -2,7 +2,7 @@ import React from 'react'
 
 const Expense = () => {
   return (
-    <div className='w-full h-5/10 bg-amber-400 overflow-hidden'>
+    <div className='w-full h-3/10 bg-amber-400 overflow-hidden'>
         <h1 className='text-blue-700 text-2xl font-bold'>Dashboard</h1>
         <div className='cards w-full h-9/10 flex gap-3 mt-5'>
             <div className="card w-2/10 h-2/8 border-1 rounded-2xl">
