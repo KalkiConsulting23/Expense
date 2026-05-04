@@ -47,11 +47,18 @@ const ExpenseTable = () => {
   
   const tabMonth = [{ month: "Jan", monthNum: "01" }, { month: "Feb", monthNum: "02" }, { month: "Mar", monthNum: "03" }, { month: "Apr", monthNum: "04" }, { month: "May", monthNum: "05" }, { month: "Jun", monthNum: "06" }, { month: "Jul", monthNum: "07" }, { month: "Aug", monthNum: "08" }, { month: "Sep", monthNum: "09" }, { month: "Oct", monthNum: "10" }, { month: "Nov", monthNum: "11" }, { month: "Dec", monthNum: "12" }];
   const [Total, setTotal] = useState([])
+   const monthTot={}
+    tabMonth.forEach((data) => {
+      const janDivs = document.querySelectorAll(`[data-month=${data.month}]`);
+      const ndata=Array.from(janDivs).map((div) => {if(div.textContent=="-") return 0; else return Number(div.textContent)})
+        monthTot[data.month] =Array.from(janDivs).map((div) => {if(div.textContent=="-") return 0; else return Number(div.textContent)}).reduce((a, b) => a + b, 0);
+    });
+    // setTotal(monthTot);
   const [expenses, setexpenses] = useState([]);
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
+  const [Flag, setFlag] = useState(false);
   const filterdata=expenses.filter((data) => 
-    
     data.startDate.split("-")[0] <= currentYear );
     // console.log(filterdata);
     useEffect( () => {
@@ -61,13 +68,8 @@ const ExpenseTable = () => {
         await axios.post(`http://localhost:5000/api/expense/allexpense`)
         .then(response => setexpenses(response.data));
       }
-    const monthTot={}
-    tabMonth.forEach((data) => {
-      const janDivs = document.querySelectorAll(`[data-month=${data.month}]`);
-      const ndata=Array.from(janDivs).map((div) => {if(div.textContent=="-") return 0; else return Number(div.textContent)})
-        monthTot[data.month] =Array.from(janDivs).map((div) => {if(div.textContent=="-") return 0; else return Number(div.textContent)}).reduce((a, b) => a + b, 0);
-    })
-    setTotal(monthTot)
+   
+    // setTotal(monthTot)
     fDATA();
     console.log(Total);
     
@@ -85,7 +87,7 @@ const ExpenseTable = () => {
   // console.log(expenses)
   return (
     <div className='w-full h-6/10 overflow-hidden'>
-
+      <button onClick={() => Flag ? setFlag(false) : setFlag(true)}>Show Total</button>
       <div className='flex w-full px-2'>
         <div id="rex" className='w-20'>
           Expnase name
@@ -226,7 +228,7 @@ const ExpenseTable = () => {
         {tabMonth.map((tdata,id)=>(
           <div className="flex">
             <div className="border-2 border-black w-19">
-              {/* {Total[`${tdata.month}`]} */}
+              {Flag ? monthTot[`${tdata.month}`]:0}
             </div>
             <div className="border-2 border-black w-18">
               0
