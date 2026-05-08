@@ -46,9 +46,9 @@ const AddExpense = () => {
                 <button onClick={ ()=>formShow("exp") } className='w-30 h-15  rounded-2xl border-1'>Add Expense</button>
             <button onClick={()=>formShow("pay")} className='p-2 h-15  rounded-2xl border-1'>Add Project</button>
             </div>
-            <button className='border-2'>Home Page</button>
+            <button onClick={() => navigate("/")} className='border-2'>Home Page</button>
         </div>
-        <div className='w-full h-7/10 bg-amber-300 flex items-center justify-center'>
+        <div className='w-full h-7/10  flex items-center justify-center'>
             {exp && <div>
                 <h1 className='text-2xl text-center'>Expense</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>

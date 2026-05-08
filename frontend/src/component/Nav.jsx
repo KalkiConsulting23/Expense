@@ -11,7 +11,11 @@ const Nav = () => {
         <div className='h-full w-1/10 content-center'>
             Logo
         </div>
+        <div>
         <button onClick={() => navigate("/expense")} className='w-30 h-1/2 border-2 rounded-2xl'>Add Expense</button>
+        <button onClick={() => navigate("/pay")} className='w-30 h-1/2 border-2 rounded-2xl'>Add Project Pay</button>
+
+        </div>
 
     </div>
   )

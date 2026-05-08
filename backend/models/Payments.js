@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  amount: { type: Number, required: true },
-payType: { type: String,
+  Payment_name: { type: String, required: true },
+  Amount: { type: Number, required: true },
+Pay_type: { type: String,
     enum: ["Daily", "Weekly", "Monthly"],
     default: "Monthly",
    },
-  startDate: { type: Date },
-  Salary:{type:Array}
+  strt_date: { type: Date },
+  Salary:[]
  
   
 

@@ -11,6 +11,7 @@ app.use(express.json());
 // Routes
 // app.use("/api/seed-varieties", require("./routes/seedVarietyRoutes"));
 app.use("/api/expense", require("./routes/expenseRoutes"));
+app.use("/api/payment", require("./routes/paymentsRoutes"));
 // app.use("/api/order-items", require("./routes/orderItemRoutes"));
 // app.use("/api/sowing-plans", require("./routes/sowingPlanRoutes"));
 // app.use("/api/reports", require("./routes/reportRoutes"));
