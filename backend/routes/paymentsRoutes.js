@@ -7,6 +7,7 @@ router.post("/", function (req, res) {
 });
 router.post("/create", ctrl.createPayment);
 router.post("/allproject",ctrl.readPayment);
+router.post("/update/:id",ctrl.updatePayment);
 // router.post("/update/:id",ctrl.updateExpense);
 // router.get("/:id", ctrl.getOrderById);
 // router.put("/:id", ctrl.updateOrder);

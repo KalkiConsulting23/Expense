@@ -12,6 +12,7 @@ const AddProjectPay = () => {
     const navigate=useNavigate();
     const [selectedProject, setselectedProject] = useState({});
 //  const route=Router();
+    const { register,handleSubmit,formState: { errors },} = useForm();
     const [calcPay, setcalcPay] = useState(0)
     const payCalc=(pay)=>{
         var actDays=pay.target.value;
@@ -22,6 +23,14 @@ const AddProjectPay = () => {
             setcalcPay(Math.round(dayprice*actDays));
         }
     }
+    const onSubmit = async (data) => {
+        data.preventDefault;
+        data.Amount=calcPay;
+    await axios.post("http://localhost:5000/api/payment/update/"+selectedProject._id, data);
+    alert("Salary Added");
+    navigate("/");
+    // route.push("/");
+  };
    const  projectHandler=(data)=>{
     console.log(data.target.value);
     var filterPorject= Project.find((project)=>project.Payment_name==data.target.value)
@@ -72,17 +81,19 @@ const AddProjectPay = () => {
             </div>
             <div className='w-8/10 h-full bg-amber-200'>
                 <div >
-                    <form className='flex flex-col' >
+                    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col' >
                 <h1>{selectedProject.Payment_name}</h1>
                 <label htmlFor="">Payment Date</label>
-                <input type="date" />
+                <input {...register("pay_date",{required:true})} required type="date" />
                 <label htmlFor="">Calculate Pay</label>
                 <div>
                 <h1>Project Amount on {selectedProject.Pay_type} basis={selectedProject.Amount}</h1>
                     {selectedProject.Pay_type=="Daily"?<input className='border' onChange={(e)=>payCalc(e)} type="number" min={0} max={31} placeholder='Enter Days' />:selectedProject.Pay_type=="Monthly"?<><input className='border workingday' type="number" min={0} max={31}  placeholder='Enter working Days' />and<input className='border' type="number" min={0} max={31} onChange={(e)=>payCalc(e)} placeholder='Actual Days' /></>:null}
                     
-                =<input className='border' value={calcPay} type="text" />
+                =<input {...register("Amount")} className='border' value={calcPay} type="text" />
+
                     </div>
+                    <button type='submit' className='w-20 bg-red-500'>Add</button>
                 </form>
                 </div>
             </div>

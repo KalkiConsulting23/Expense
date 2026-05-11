@@ -26,6 +26,13 @@ exports.readPayment=async(req,res)=>{
     var data=await Payments.find();
     res.json(data);
 }
+exports.updatePayment=async(req,res)=>{
+    var data=await Payments.findById(req.params.id);
+    var {Amount,pay_date}=req.body;
+    data.Salary.push({"Amount":Amount,"Pay_type":data.Pay_type,"pay_date":pay_date});
+    await data.save();
+    res.json(data);
+}
 
 // exports.getOrders = async (req, res) => {
 //   try {
